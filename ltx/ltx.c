@@ -31,7 +31,7 @@
 #define LTX_LOG(fmt, ...) ltx_log(LTX_POS, fmt, ##__VA_ARGS__)
 
 #ifdef __GLIBC__
-#define PRINT_BACKTRACE do { \
+#define PRINT_BACKTRACE do { 						\
 	void *buf[BUFSIZ];						\
 	int i, nptrs = backtrace(buf, BUFSIZ);				\
 	for (i = 0; i < nptrs; i++)					\
@@ -420,7 +420,7 @@ static int ltx_exp_fd(const struct ltx_pos pos,
 	if (fd > -1)
 		return fd;
 
-	ltx_log(pos, "Invalid FD: %s = %d: %s", expr, fd, strerrorname_np(errno));
+	ltx_log(pos, "Invalid FD: %s = %d: %s", expr, fd, strerror(errno));
 
 	exit(1);
 }
@@ -433,7 +433,7 @@ static void ltx_exp_0(const struct ltx_pos pos,
 	if (!ret)
 		return;
 
-	ltx_log(pos, "Not Zero: %s = %d: %s", expr, ret, strerrorname_np(errno));
+	ltx_log(pos, "Not Zero: %s = %d: %s", expr, ret, strerror(errno));
 
 	exit(1);
 }
@@ -446,7 +446,7 @@ static int ltx_exp_pos(const struct ltx_pos pos,
 	if (ret > -1)
 		return ret;
 
-	ltx_log(pos, "Not positive: %s = %d: %s", expr, ret, strerrorname_np(errno));
+	ltx_log(pos, "Not positive: %s = %d: %s", expr, ret, strerror(errno));
 
 	exit(1);
 }
@@ -483,7 +483,7 @@ static void drain_write_buf(void)
 
 		ltx_assert(olen > -1,
 			   "write(out_fd, out_buf.data, %zu): %s",
-			   out_buf.used, strerrorname_np(errno));
+			   out_buf.used, strerror(errno));
 
 		out_buf.off += olen;
 		out_buf.used -= olen;
